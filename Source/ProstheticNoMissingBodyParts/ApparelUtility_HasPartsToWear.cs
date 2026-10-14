@@ -25,9 +25,7 @@ internal static class ApparelUtility_HasPartsToWear
         // and we try to fix this, if pawn has a bionic part in right place (Bionic Arm, Bionic Leg, etc...)
 
         // load mod settings with whitelisted bionic parts for arms and legs
-        var settings = LoadedModManager
-            .GetMod<ProstheticNoMissingBodyPartsMod>()
-            .GetSettings<ProstheticNoMissingBodyPartsSettings>();
+        var settings = ProstheticNoMissingBodyPartsMod.settings;
 
         // prepare hash sets for quicker checks
         var armsWhitelist = new HashSet<string>();

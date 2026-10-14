@@ -9,7 +9,6 @@ namespace ProstheticNoMissingBodyParts;
 
 public class ProstheticNoMissingBodyPartsMod : Mod
 {
-    private static ProstheticNoMissingBodyPartsMod mod;
     private static string currentVersion;
 
     private readonly List<HediffDef> armsHediff = [];
@@ -20,7 +19,7 @@ public class ProstheticNoMissingBodyPartsMod : Mod
     private readonly Dictionary<string, bool[]> handsWhitelistMap = new();
     private readonly List<HediffDef> legsHediff = [];
     private readonly Dictionary<string, bool[]> legsWhitelistMap = new();
-    private readonly ProstheticNoMissingBodyPartsSettings settings;
+    public static ProstheticNoMissingBodyPartsSettings settings { get; private set; }
     private Vector2 allViewScroll = new(0, 0);
 
     private bool isInitialized;
@@ -29,56 +28,55 @@ public class ProstheticNoMissingBodyPartsMod : Mod
     public ProstheticNoMissingBodyPartsMod(ModContentPack content) : base(content)
     {
         settings = GetSettings<ProstheticNoMissingBodyPartsSettings>();
-        mod = this;
         currentVersion = VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
     }
 
     public override void WriteSettings()
     {
-        if (mod.settings.ArmsWhitelist != null)
+        if (settings.ArmsWhitelist != null)
         {
-            mod.settings.ArmsWhitelist.Clear();
+            settings.ArmsWhitelist.Clear();
             foreach (var kv in armsWhitelistMap)
             {
                 if (kv.Value[0])
                 {
-                    mod.settings.ArmsWhitelist.Add(kv.Key);
+                    settings.ArmsWhitelist.Add(kv.Key);
                 }
             }
         }
 
-        if (mod.settings.HandsWhitelist != null)
+        if (settings.HandsWhitelist != null)
         {
-            mod.settings.HandsWhitelist.Clear();
+            settings.HandsWhitelist.Clear();
             foreach (var kv in handsWhitelistMap)
             {
                 if (kv.Value[0])
                 {
-                    mod.settings.HandsWhitelist.Add(kv.Key);
+                    settings.HandsWhitelist.Add(kv.Key);
                 }
             }
         }
 
-        if (mod.settings.LegsWhitelist != null)
+        if (settings.LegsWhitelist != null)
         {
-            mod.settings.LegsWhitelist.Clear();
+            settings.LegsWhitelist.Clear();
             foreach (var kv in legsWhitelistMap)
             {
                 if (kv.Value[0])
                 {
-                    mod.settings.LegsWhitelist.Add(kv.Key);
+                    settings.LegsWhitelist.Add(kv.Key);
                 }
             }
         }
 
-        if (mod.settings.FeetWhitelist != null)
+        if (settings.FeetWhitelist != null)
         {
-            mod.settings.FeetWhitelist.Clear();
+            settings.FeetWhitelist.Clear();
             foreach (var kv in feetWhitelistMap)
             {
                 if (kv.Value[0])
                 {
-                    mod.settings.FeetWhitelist.Add(kv.Key);
+                    settings.FeetWhitelist.Add(kv.Key);
                 }
             }
         }
@@ -96,19 +94,19 @@ public class ProstheticNoMissingBodyPartsMod : Mod
 
         isInitialized = true;
 
-        mod.settings.ArmsWhitelist ??= [];
+        settings.ArmsWhitelist ??= [];
 
-        mod.settings.HandsWhitelist ??= [];
+        settings.HandsWhitelist ??= [];
 
-        mod.settings.LegsWhitelist ??= [];
+        settings.LegsWhitelist ??= [];
 
-        mod.settings.FeetWhitelist ??= [];
+        settings.FeetWhitelist ??= [];
 
         // sets for checkboxes default checks
-        var currentArmsSet = new HashSet<string>(mod.settings.ArmsWhitelist);
-        var currentHandsSet = new HashSet<string>(mod.settings.HandsWhitelist);
-        var currentLegsSet = new HashSet<string>(mod.settings.LegsWhitelist);
-        var currentFeetSet = new HashSet<string>(mod.settings.FeetWhitelist);
+        var currentArmsSet = new HashSet<string>(settings.ArmsWhitelist);
+        var currentHandsSet = new HashSet<string>(settings.HandsWhitelist);
+        var currentLegsSet = new HashSet<string>(settings.LegsWhitelist);
+        var currentFeetSet = new HashSet<string>(settings.FeetWhitelist);
 
         // load all recipes definitions that replace original (natural) arms or legs and extract hediff from it
         foreach (var recipeDef in DefDatabase<RecipeDef>.AllDefs)
