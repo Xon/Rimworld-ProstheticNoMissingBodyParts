@@ -75,107 +75,112 @@ internal static class ApparelUtility_HasPartsToWear
         }
 
         var hediffs = p.health.hediffSet.hediffs;
-        // check if apparel needed left hand, especially for jewelry mod, pawns try to wear bracer... on fingers... omg...
-        if (isLeftHand)
+        // check if apparel needed left/right hand, especially for jewelry mod, pawns try to wear bracer... on fingers... omg...
+        if (isLeftHand || isRightHand)
         {
-            __result = hediffs.Exists(h =>
+            var part = isLeftHand ? ModDefOf.LeftHand : ModDefOf.RightHand;
+            foreach (var h in hediffs)
             {
                 if (h.Part?.customLabel == null || h.def == null)
                 {
-                    return false;
+                    continue;
                 }
 
-                // true if left arm replaced with whitelisted bionic part
+                // true if arm replaced with whitelisted bionic part
                 if (ModDefOf.ShoulderDefs.Contains(h.Part.def))
                 {
-                    return ModDefOf.ArmsAllowHediffDefs.Contains(h.def) &&
-                           BodyPartUtils.ExistsDeep(h.Part, ModDefOf.LeftHand);
+                    if (ModDefOf.ArmsAllowHediffDefs.Contains(h.def) && BodyPartUtils.ExistsDeep(h.Part, part))
+                    {
+                        __result = true;
+                        return;
+                    }
+                    continue;
                 }
 
-                // true if left hand replaced with whitelisted bionic part
+                // true if hand replaced with whitelisted bionic part
                 if (ModDefOf.HandDefs.Contains(h.Part.def))
                 {
-                    return ModDefOf.HandsAllowHediffDefs.Contains(h.def) &&
-                           BodyPartUtils.ExistsDeep(h.Part, ModDefOf.LeftHand);
+                    if (ModDefOf.HandsAllowHediffDefs.Contains(h.def) && BodyPartUtils.ExistsDeep(h.Part, part))
+                    {
+                        __result = true;
+                        return;
+                    }
+                    continue;
                 }
+            }
 
-                return false;
-            });
-            return;
-        }
-
-        // check if apparel needed right hand, especially for jewelry, wearing rings?
-        if (isRightHand)
-        {
-            __result = hediffs.Exists(h =>
-            {
-                if (h.Part?.customLabel == null || h.def == null)
-                {
-                    return false;
-                }
-
-                // true if right arm replaced with whitelisted bionic part
-                if (ModDefOf.ShoulderDefs.Contains(h.Part.def))
-                {
-                    return ModDefOf.ArmsAllowHediffDefs.Contains(h.def) &&
-                           BodyPartUtils.ExistsDeep(h.Part, ModDefOf.RightHand);
-                }
-
-                // true if right hand replaced with whitelisted bionic part
-                if (ModDefOf.HandDefs.Contains(h.Part.def))
-                {
-                    return ModDefOf.HandsAllowHediffDefs.Contains(h.def) &&
-                           BodyPartUtils.ExistsDeep(h.Part, ModDefOf.RightHand);
-                }
-
-                return false;
-            });
             return;
         }
 
         // check if apparel needed hands, useful for gloves
         if (isHands)
         {
-            __result = hediffs.Exists(h =>
+            foreach (var h in hediffs)
             {
                 if (h.Part?.def == null || h.def == null)
                 {
-                    return false;
+                    continue;
                 }
 
                 // true if arm replaced with whitelisted bionic part
                 if (ModDefOf.ShoulderDefs.Contains(h.Part.def))
                 {
-                    return ModDefOf.ArmsAllowHediffDefs.Contains(h.def);
+                    if (ModDefOf.ArmsAllowHediffDefs.Contains(h.def))
+                    {
+                        __result = true;
+                        return;
+                    }
+                    continue;
                 }
 
                 // true if hand replaced with whitelisted bionic part
-                return ModDefOf.HandDefs.Contains(h.Part.def) &&
-                       ModDefOf.HandsAllowHediffDefs.Contains(h.def);
-            });
+                if (ModDefOf.HandDefs.Contains(h.Part.def))
+                {
+                    if (ModDefOf.HandsAllowHediffDefs.Contains(h.def))
+                    {
+                        __result = true;
+                        return;
+                    }
+                    continue;
+                }
+            }
+
             return;
         }
 
         // check if apparel needed feet, useful for boots
         if (isFeet)
         {
-            __result = hediffs.Exists(h =>
+            foreach (var h in hediffs)
             {
                 if (h.Part?.def == null || h.def == null)
                 {
-                    return false;
+                    continue;
                 }
 
-                // true if leg replaced with whitelisted bionic part
+                // true if arm replaced with whitelisted bionic part
                 if (ModDefOf.LegDefs.Contains(h.Part.def))
                 {
-                    return ModDefOf.LegsAllowHediffDefs.Contains(h.def);
+                    if (ModDefOf.LegsAllowHediffDefs.Contains(h.def))
+                    {
+                        __result = true;
+                        return;
+                    }
+                    continue;
                 }
 
-                // true if foot replaced with whitelisted bionic part
-                return ModDefOf.FootDefs.Contains(h.Part.def) &&
-                       ModDefOf.FeetAllowHediffDefs.Contains(h.def);
-            });
+                // true if hand replaced with whitelisted bionic part
+                if (ModDefOf.FootDefs.Contains(h.Part.def))
+                {
+                    if (ModDefOf.FeetAllowHediffDefs.Contains(h.def))
+                    {
+                        __result = true;
+                        return;
+                    }
+                    continue;
+                }
+            }
+
             return;
         }
 
