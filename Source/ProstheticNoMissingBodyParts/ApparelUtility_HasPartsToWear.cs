@@ -24,38 +24,6 @@ internal static class ApparelUtility_HasPartsToWear
         // this code run only if original Rimworld check return false (body part is missed)
         // and we try to fix this, if pawn has a bionic part in right place (Bionic Arm, Bionic Leg, etc...)
 
-        // load mod settings with whitelisted bionic parts for arms and legs
-        var settings = ProstheticNoMissingBodyPartsMod.settings;
-
-        // prepare hash sets for quicker checks
-        var armsWhitelist = new HashSet<string>();
-        var legsWhitelist = new HashSet<string>();
-        var handsWhitelist = new HashSet<string>();
-        var feetWhitelist = new HashSet<string>();
-
-        // for arms
-        if (settings.ArmsWhitelist != null)
-        {
-            armsWhitelist.AddRange(settings.ArmsWhitelist);
-        }
-
-        // for legs
-        if (settings.LegsWhitelist != null)
-        {
-            legsWhitelist.AddRange(settings.LegsWhitelist);
-        }
-
-        // for hands
-        if (settings.HandsWhitelist != null)
-        {
-            handsWhitelist.AddRange(settings.HandsWhitelist);
-        }
-
-        // for feet
-        if (settings.FeetWhitelist != null)
-        {
-            feetWhitelist.AddRange(settings.FeetWhitelist);
-        }
 
         // prepare bool set for apparel body part groups
         var isLeftHand = false;
@@ -65,25 +33,25 @@ internal static class ApparelUtility_HasPartsToWear
 
         foreach (var groupDefName in apparel.apparel.bodyPartGroups.Select(group => group.defName))
         {
-            if (groupDefName.Equals("LeftHand"))
+            if (groupDefName == ModDefOf.LeftHand)
             {
                 isLeftHand = true;
                 break;
             }
 
-            if (groupDefName.Equals("RightHand"))
+            if (groupDefName == ModDefOf.RightHand)
             {
                 isRightHand = true;
                 break;
             }
 
-            if (groupDefName.Equals("Hands"))
+            if (groupDefName == ModDefOf.Hands)
             {
                 isHands = true;
                 break;
             }
 
-            if (groupDefName.Equals("Feet"))
+            if (groupDefName == ModDefOf.Feet)
             {
                 isFeet = true;
                 break;
@@ -91,13 +59,13 @@ internal static class ApparelUtility_HasPartsToWear
 
             var body = p.def.race.body.AllParts;
 
-            if (BodyPartUtils.ExistsByGroupAndParent(body, "Shoulder", groupDefName))
+            if (BodyPartUtils.ExistsByGroupAndParent(body, ModDefOf.Shoulder, groupDefName))
             {
                 isHands = true;
                 break;
             }
 
-            if (!BodyPartUtils.ExistsByGroupAndParent(body, "Leg", groupDefName))
+            if (!BodyPartUtils.ExistsByGroupAndParent(body, ModDefOf.Leg, groupDefName))
             {
                 continue;
             }
@@ -112,23 +80,23 @@ internal static class ApparelUtility_HasPartsToWear
         {
             __result = hediffs.Exists(h =>
             {
-                if (h.Part?.customLabel == null || h.def?.defName == null)
+                if (h.Part?.customLabel == null || h.def == null)
                 {
                     return false;
                 }
 
                 // true if left arm replaced with whitelisted bionic part
-                if (HarmonyPatches.ShoulderDefNames.Contains(h.Part.def.defName))
+                if (ModDefOf.ShoulderDefs.Contains(h.Part.def))
                 {
-                    return armsWhitelist.Contains(h.def.defName) &&
-                           BodyPartUtils.ExistsDeep(h.Part, "LeftHand");
+                    return ModDefOf.ArmsAllowHediffDefs.Contains(h.def) &&
+                           BodyPartUtils.ExistsDeep(h.Part, ModDefOf.LeftHand);
                 }
 
                 // true if left hand replaced with whitelisted bionic part
-                if (HarmonyPatches.HandDefNames.Contains(h.Part.def.defName))
+                if (ModDefOf.HandDefs.Contains(h.Part.def))
                 {
-                    return handsWhitelist.Contains(h.def.defName) &&
-                           BodyPartUtils.ExistsDeep(h.Part, "LeftHand");
+                    return ModDefOf.HandsAllowHediffDefs.Contains(h.def) &&
+                           BodyPartUtils.ExistsDeep(h.Part, ModDefOf.LeftHand);
                 }
 
                 return false;
@@ -141,23 +109,23 @@ internal static class ApparelUtility_HasPartsToWear
         {
             __result = hediffs.Exists(h =>
             {
-                if (h.Part?.customLabel == null || h.def?.defName == null)
+                if (h.Part?.customLabel == null || h.def == null)
                 {
                     return false;
                 }
 
                 // true if right arm replaced with whitelisted bionic part
-                if (HarmonyPatches.ShoulderDefNames.Contains(h.Part.def.defName))
+                if (ModDefOf.ShoulderDefs.Contains(h.Part.def))
                 {
-                    return armsWhitelist.Contains(h.def.defName) &&
-                           BodyPartUtils.ExistsDeep(h.Part, "RightHand");
+                    return ModDefOf.ArmsAllowHediffDefs.Contains(h.def) &&
+                           BodyPartUtils.ExistsDeep(h.Part, ModDefOf.RightHand);
                 }
 
                 // true if right hand replaced with whitelisted bionic part
-                if (HarmonyPatches.HandDefNames.Contains(h.Part.def.defName))
+                if (ModDefOf.HandDefs.Contains(h.Part.def))
                 {
-                    return handsWhitelist.Contains(h.def.defName) &&
-                           BodyPartUtils.ExistsDeep(h.Part, "RightHand");
+                    return ModDefOf.HandsAllowHediffDefs.Contains(h.def) &&
+                           BodyPartUtils.ExistsDeep(h.Part, ModDefOf.RightHand);
                 }
 
                 return false;
@@ -170,20 +138,20 @@ internal static class ApparelUtility_HasPartsToWear
         {
             __result = hediffs.Exists(h =>
             {
-                if (h.Part?.def?.defName == null || h.def?.defName == null)
+                if (h.Part?.def == null || h.def == null)
                 {
                     return false;
                 }
 
                 // true if arm replaced with whitelisted bionic part
-                if (HarmonyPatches.ShoulderDefNames.Contains(h.Part.def.defName))
+                if (ModDefOf.ShoulderDefs.Contains(h.Part.def))
                 {
-                    return armsWhitelist.Contains(h.def.defName);
+                    return ModDefOf.ArmsAllowHediffDefs.Contains(h.def);
                 }
 
                 // true if hand replaced with whitelisted bionic part
-                return HarmonyPatches.HandDefNames.Contains(h.Part.def.defName) &&
-                       handsWhitelist.Contains(h.def.defName);
+                return ModDefOf.HandDefs.Contains(h.Part.def) &&
+                       ModDefOf.HandsAllowHediffDefs.Contains(h.def);
             });
             return;
         }
@@ -193,20 +161,20 @@ internal static class ApparelUtility_HasPartsToWear
         {
             __result = hediffs.Exists(h =>
             {
-                if (h.Part?.def?.defName == null || h.def?.defName == null)
+                if (h.Part?.def == null || h.def == null)
                 {
                     return false;
                 }
 
                 // true if leg replaced with whitelisted bionic part
-                if (HarmonyPatches.LegDefNames.Contains(h.Part.def.defName))
+                if (ModDefOf.LegDefs.Contains(h.Part.def))
                 {
-                    return legsWhitelist.Contains(h.def.defName);
+                    return ModDefOf.LegsAllowHediffDefs.Contains(h.def);
                 }
 
                 // true if foot replaced with whitelisted bionic part
-                return HarmonyPatches.FootDefNames.Contains(h.Part.def.defName) &&
-                       feetWhitelist.Contains(h.def.defName);
+                return ModDefOf.FootDefs.Contains(h.Part.def) &&
+                       ModDefOf.FeetAllowHediffDefs.Contains(h.def);
             });
             return;
         }

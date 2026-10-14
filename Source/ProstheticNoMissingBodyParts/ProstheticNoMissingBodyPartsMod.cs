@@ -81,6 +81,7 @@ public class ProstheticNoMissingBodyPartsMod : Mod
             }
         }
 
+        ModDefOf.resetCaches();
         base.WriteSettings();
     }
 
@@ -117,7 +118,7 @@ public class ProstheticNoMissingBodyPartsMod : Mod
             }
 
             // catch arm
-            if (recipeDef.appliedOnFixedBodyParts.Exists(x => HarmonyPatches.ShoulderDefNames.Contains(x.defName)))
+            if (recipeDef.appliedOnFixedBodyParts.Exists(x => ModDefOf.ShoulderDefs.Contains(x)))
             {
                 armsWhitelistMap[recipeDef.addsHediff.defName] =
                     [currentArmsSet.Contains(recipeDef.addsHediff.defName)];
@@ -125,7 +126,7 @@ public class ProstheticNoMissingBodyPartsMod : Mod
             }
 
             // catch hand
-            if (recipeDef.appliedOnFixedBodyParts.Exists(x => HarmonyPatches.HandDefNames.Contains(x.defName)))
+            if (recipeDef.appliedOnFixedBodyParts.Exists(x => ModDefOf.HandDefs.Contains(x)))
             {
                 handsWhitelistMap[recipeDef.addsHediff.defName] =
                     [currentHandsSet.Contains(recipeDef.addsHediff.defName)];
@@ -133,7 +134,7 @@ public class ProstheticNoMissingBodyPartsMod : Mod
             }
 
             // catch leg
-            if (recipeDef.appliedOnFixedBodyParts.Exists(x => HarmonyPatches.LegDefNames.Contains(x.defName)))
+            if (recipeDef.appliedOnFixedBodyParts.Exists(x => ModDefOf.LegDefs.Contains(x)))
             {
                 legsWhitelistMap[recipeDef.addsHediff.defName] =
                     [currentLegsSet.Contains(recipeDef.addsHediff.defName)];
@@ -141,7 +142,7 @@ public class ProstheticNoMissingBodyPartsMod : Mod
             }
 
             // catch foot
-            if (!recipeDef.appliedOnFixedBodyParts.Exists(x => HarmonyPatches.FootDefNames.Contains(x.defName)))
+            if (!recipeDef.appliedOnFixedBodyParts.Exists(x => ModDefOf.FootDefs.Contains(x)))
             {
                 continue;
             }
@@ -150,6 +151,7 @@ public class ProstheticNoMissingBodyPartsMod : Mod
                 [currentFeetSet.Contains(recipeDef.addsHediff.defName)];
             feetHediff.Add(recipeDef.addsHediff);
         }
+        ModDefOf.resetCaches();
     }
 
     public override void DoSettingsWindowContents(Rect inRect)
