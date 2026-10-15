@@ -65,13 +65,13 @@ internal static class ApparelUtility_HasPartsToWear
                 break;
             }
 
-            if (!BodyPartUtils.ExistsByGroupAndParent(body, ModDefOf.Leg, groupDefName))
+            if (BodyPartUtils.ExistsByGroupAndParent(body, ModDefOf.Leg, groupDefName))
             {
-                continue;
+                isFeet = true;
+                break;
             }
 
-            isFeet = true;
-            break;
+            continue;
         }
 
         var hediffs = p.health.hediffSet.hediffs;
