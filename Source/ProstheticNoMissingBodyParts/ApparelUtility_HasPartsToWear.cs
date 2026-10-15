@@ -81,7 +81,7 @@ internal static class ApparelUtility_HasPartsToWear
             var part = isLeftHand ? ModDefOf.LeftHand : ModDefOf.RightHand;
             foreach (var h in hediffs)
             {
-                if (h.Part?.customLabel == null || h.def == null)
+                if (h.Part?.def == null || h.def == null)
                 {
                     continue;
                 }
