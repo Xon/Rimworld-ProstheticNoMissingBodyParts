@@ -28,6 +28,7 @@ public static class BodyPartUtils
     public static List<T> ResolveDefs<T>(List<string> defNames) where T : Def
     {
         var list = new List<T>(defNames.Count);
+        defNames.Sort();
         foreach (var defName in defNames)
         {
             var part = DefDatabase<T>.GetNamedSilentFail(defName);
