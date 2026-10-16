@@ -36,11 +36,11 @@ public class ProstheticNoMissingBodyPartsMod : Mod
         if (settings.ArmsWhitelist != null)
         {
             settings.ArmsWhitelist.Clear();
-            foreach (var kv in armsWhitelistMap)
+            foreach (var key in armsWhitelistMap.Keys.OrderBy(o=>o))
             {
-                if (kv.Value[0])
+                if (armsWhitelistMap.TryGetValue(key, out var value) && value[0])
                 {
-                    settings.ArmsWhitelist.Add(kv.Key);
+                    settings.ArmsWhitelist.Add(key);
                 }
             }
         }
@@ -48,11 +48,11 @@ public class ProstheticNoMissingBodyPartsMod : Mod
         if (settings.HandsWhitelist != null)
         {
             settings.HandsWhitelist.Clear();
-            foreach (var kv in handsWhitelistMap)
+            foreach (var key in handsWhitelistMap.Keys.OrderBy(o=>o))
             {
-                if (kv.Value[0])
+                if (handsWhitelistMap.TryGetValue(key, out var value) && value[0])
                 {
-                    settings.HandsWhitelist.Add(kv.Key);
+                    settings.HandsWhitelist.Add(key);
                 }
             }
         }
@@ -60,11 +60,11 @@ public class ProstheticNoMissingBodyPartsMod : Mod
         if (settings.LegsWhitelist != null)
         {
             settings.LegsWhitelist.Clear();
-            foreach (var kv in legsWhitelistMap)
+            foreach (var key in legsWhitelistMap.Keys.OrderBy(o=>o))
             {
-                if (kv.Value[0])
+                if (legsWhitelistMap.TryGetValue(key, out var value) && value[0])
                 {
-                    settings.LegsWhitelist.Add(kv.Key);
+                    settings.LegsWhitelist.Add(key);
                 }
             }
         }
@@ -72,11 +72,11 @@ public class ProstheticNoMissingBodyPartsMod : Mod
         if (settings.FeetWhitelist != null)
         {
             settings.FeetWhitelist.Clear();
-            foreach (var kv in feetWhitelistMap)
+            foreach (var key in feetWhitelistMap.Keys.OrderBy(o=>o))
             {
-                if (kv.Value[0])
+                if (feetWhitelistMap.TryGetValue(key, out var value) && value[0])
                 {
-                    settings.FeetWhitelist.Add(kv.Key);
+                    settings.FeetWhitelist.Add(key);
                 }
             }
         }
