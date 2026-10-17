@@ -31,27 +31,27 @@ internal static class ApparelUtility_HasPartsToWear
         var isHands = false;
         var isFeet = false;
 
-        foreach (var groupDefName in apparel.apparel.bodyPartGroups.Select(group => group.defName))
+        foreach (var groupDef in apparel.apparel.bodyPartGroups)
         {
-            if (groupDefName == ModDefOf.LeftHand)
+            if (groupDef == ModDefOf.LeftHand)
             {
                 isLeftHand = true;
                 break;
             }
 
-            if (groupDefName == ModDefOf.RightHand)
+            if (groupDef == ModDefOf.RightHand)
             {
                 isRightHand = true;
                 break;
             }
 
-            if (groupDefName == ModDefOf.Hands)
+            if (groupDef == ModDefOf.Hands)
             {
                 isHands = true;
                 break;
             }
 
-            if (groupDefName == ModDefOf.Feet)
+            if (groupDef == ModDefOf.Feet)
             {
                 isFeet = true;
                 break;
@@ -59,13 +59,13 @@ internal static class ApparelUtility_HasPartsToWear
 
             var body = p.def.race.body.AllParts;
 
-            if (BodyPartUtils.ExistsByGroupAndParent(body, ModDefOf.Shoulder, groupDefName))
+            if (BodyPartUtils.ExistsByGroupAndParent(body, ModDefOf.Shoulder, groupDef))
             {
                 isHands = true;
                 break;
             }
 
-            if (BodyPartUtils.ExistsByGroupAndParent(body, ModDefOf.Leg, groupDefName))
+            if (BodyPartUtils.ExistsByGroupAndParent(body, ModDefOf.Leg, groupDef))
             {
                 isFeet = true;
                 break;
