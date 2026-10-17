@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -9,7 +10,7 @@ namespace ProstheticNoMissingBodyParts;
 [HarmonyPatch(typeof(ApparelUtility), nameof(ApparelUtility.HasPartsToWear))]
 internal static class ApparelUtility_HasPartsToWear
 {
-    private static void Postfix(ref bool __result, Pawn p, ThingDef apparel)
+    public static void Postfix(ref bool __result, Pawn p, ThingDef apparel)
     {
         if (__result)
         {
@@ -64,27 +65,27 @@ internal static class ApparelUtility_HasPartsToWear
         var isHands = false;
         var isFeet = false;
 
-        foreach (var g in apparel.apparel.bodyPartGroups)
+        foreach (var groupDefName in apparel.apparel.bodyPartGroups.Select(group => group.defName))
         {
-            if (g.defName.Equals("LeftHand"))
+            if (groupDefName.Equals("LeftHand"))
             {
                 isLeftHand = true;
                 break;
             }
 
-            if (g.defName.Equals("RightHand"))
+            if (groupDefName.Equals("RightHand"))
             {
                 isRightHand = true;
                 break;
             }
 
-            if (g.defName.Equals("Hands"))
+            if (groupDefName.Equals("Hands"))
             {
                 isHands = true;
                 break;
             }
 
-            if (g.defName.Equals("Feet"))
+            if (groupDefName.Equals("Feet"))
             {
                 isFeet = true;
                 break;
@@ -92,13 +93,13 @@ internal static class ApparelUtility_HasPartsToWear
 
             var body = p.def.race.body.AllParts;
 
-            if (BodyPartUtils.ExistsByGroupAndParent(body, "Shoulder", g.defName))
+            if (BodyPartUtils.ExistsByGroupAndParent(body, "Shoulder", groupDefName))
             {
                 isHands = true;
                 break;
             }
 
-            if (!BodyPartUtils.ExistsByGroupAndParent(body, "Leg", g.defName))
+            if (!BodyPartUtils.ExistsByGroupAndParent(body, "Leg", groupDefName))
             {
                 continue;
             }

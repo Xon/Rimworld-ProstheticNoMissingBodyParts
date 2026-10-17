@@ -143,12 +143,14 @@ public class ProstheticNoMissingBodyPartsMod : Mod
             }
 
             // catch foot
-            if (recipeDef.appliedOnFixedBodyParts.Exists(x => HarmonyPatches.FootDefNames.Contains(x.defName)))
+            if (!recipeDef.appliedOnFixedBodyParts.Exists(x => HarmonyPatches.FootDefNames.Contains(x.defName)))
             {
-                feetWhitelistMap[recipeDef.addsHediff.defName] =
-                    [currentFeetSet.Contains(recipeDef.addsHediff.defName)];
-                feetHediff.Add(recipeDef.addsHediff);
+                continue;
             }
+
+            feetWhitelistMap[recipeDef.addsHediff.defName] =
+                [currentFeetSet.Contains(recipeDef.addsHediff.defName)];
+            feetHediff.Add(recipeDef.addsHediff);
         }
     }
 
